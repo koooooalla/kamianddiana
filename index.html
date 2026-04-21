@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="ko"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;meme factory&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bangers&amp;family=Black+Han+Sans&amp;family=Do+Hyeon&amp;family=Gamja+Flower&amp;family=Gothic+A1:wght@900&amp;family=Hi+Melody&amp;family=Jua&amp;family=Lobster&amp;family=Nanum+Brush+Script&amp;family=Nanum+Pen+Script&amp;family=Noto+Sans+KR:wght@900&amp;family=Oswald:wght@700&amp;family=Pacifico&amp;family=Permanent+Marker&amp;family=Press+Start+2P&amp;family=Righteous&amp;family=Roboto+Condensed:wght@700&amp;family=Song+Myung&amp;family=Yeon+Sung&amp;family=Nanum+Gothic:wght@800&amp;family=Nanum+Myeongjo:wght@800&amp;family=Poor+Story&amp;family=Single+Day&amp;family=Sunflower:wght@700&amp;family=Gaegu&amp;display=swap" rel="stylesheet"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>:root { --white: #FFFFFF; --black: #000000; --bar-height: 46px; --ui-font-size: 1.1rem; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>* { box-sizing: border-box; margin: 0; padding: 0; font-family: "Arial Narrow", Arial, sans-serif; -webkit-tap-highlight-color: transparent; outline: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body, html { width: 100%; height: 100vh; color: var(--black); overflow: hidden; background: #fff; -webkit-font-smoothing: antialiased; text-transform: lowercase; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.scene { display: none; width: 100vw; height: 100vh; position: relative; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.scene.active { display: flex; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.pane { flex: 1; height: 100vh; overflow-y: auto; position: relative; scrollbar-width: none; transition: background-color 0.4s ease-out, width 0.3s ease; border: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.pane::-webkit-scrollbar { display: none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.top-bar-area { display: flex; align-items: center; gap: 8px; padding: 12px 15px; position: sticky; top: 0; z-index: 1000; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.nav-pill-wrapper { position: relative; flex: 1; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.white-pill { background: var(--white); border-radius: 50px; height: var(--bar-height); padding: 0 18px; display: flex; justify-content: space-between; align-items: center; font-size: var(--ui-font-size); cursor: pointer; width: 100%; border: none; appearance: none; -webkit-appearance: none; font-weight: normal; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dropdown-menu { display: none; position: absolute; top: 50px; left: 0; width: 100%; background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2000; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dropdown-menu.show { display: block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dropdown-item { padding: 12px 18px; font-size: var(--ui-font-size); cursor: pointer; border-bottom: 1px solid #f0f0f0; font-weight: normal; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.dropdown-item:hover { background: #f9f9f9; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.control-btns { display: flex; gap: 6px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.circle-btn { background: rgba(255,255,255,1); border: none !important; width: var(--bar-height); height: var(--bar-height); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; cursor: pointer; color: var(--black); box-shadow: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.content-body { padding: 40px 20px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.big-title { font-size: 3.8rem; line-height: 0.95; letter-spacing: -2px; margin-bottom: 30px; font-weight: normal; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-large { display: flex; align-items: center; justify-content: center; padding: 0 40px; border-radius: 50px; background: var(--white); border: none !important; font-size: var(--ui-font-size); cursor: pointer; margin-top: 20px; font-family: inherit; color: var(--black); height: var(--bar-height); width: auto; font-weight: normal; box-shadow: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.archive-grid { display: grid; gap: 15px; padding: 0 20px 40px 20px; position: relative; z-index: 100; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.grid-cols-full { grid-template-columns: repeat(5, 1fr); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.meme-icon-card { aspect-ratio: 1/1; background: #eee; border-radius: 0px; overflow: hidden; cursor: pointer; border: none; position: relative; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.meme-icon-card img { width: 100%; height: 100%; object-fit: cover; display: block; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.editor-box { display: flex; flex-direction: column; gap: 16px; padding: 0 20px 60px 20px; align-items: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.input-pill { width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px; border: none; font-size: var(--ui-font-size); background: #fff; font-family: inherit; height: var(--bar-height); font-weight: normal; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.canvas-container { width: 100%; max-width: 400px; aspect-ratio: 1/1; background: #000; position: relative; overflow: hidden; flex-shrink: 0; border: none; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.canvas-container img { width: 100%; height: 100%; object-fit: cover; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.meme-text { position: absolute; width: 100%; text-align: center; color: white; font-weight: 900; font-size: 2rem; text-transform: uppercase; padding: 10px; pointer-events: none; -webkit-text-stroke: 1.5px black; paint-order: stroke fill; line-height: 1.1; word-wrap: break-word; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.t-top { top: 5px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.t-bottom { bottom: 5px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.view-mode-tabs { display: flex; gap: 8px; padding: 0 20px 20px 20px; position: relative; z-index: 1001; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.tab-btn { background: rgba(255,255,255,1); border: none !important; padding: 0 20px; border-radius: 20px; cursor: pointer; font-size: var(--ui-font-size); height: 36px; font-weight: normal; box-shadow: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.tab-btn.active { background: var(--white); text-decoration: underline; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.hidden { display: none !important; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="scene-home" class="scene active"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="pane" id="pane-home"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="top-bar-area"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="nav-pill-wrapper"&gt;&lt;div class="white-pill" onclick="toggleDrop('drop-home')"&gt;&lt;span&gt;home&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;div id="drop-home" class="dropdown-menu"&gt;&lt;div class="dropdown-item" onclick="go('scene-home')"&gt;home&lt;/div&gt;&lt;div class="dropdown-item" onclick="go('scene-create')"&gt;create&lt;/div&gt;&lt;div class="dropdown-item" onclick="go('scene-archive')"&gt;archive&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="content-body"&gt;&lt;h1 class="big-title"&gt;welcome to meme factory.&lt;/h1&gt;&lt;button class="btn-large" onclick="go('scene-create')"&gt;play&lt;/button&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="scene-create" class="scene"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="pane" id="create-left" style="width: 50%;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="top-bar-area"&gt;&lt;div class="nav-pill-wrapper"&gt;&lt;div class="white-pill" onclick="toggleDrop('drop-create')"&gt;&lt;span&gt;create&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;div id="drop-create" class="dropdown-menu"&gt;&lt;div class="dropdown-item" onclick="go('scene-home')"&gt;home&lt;/div&gt;&lt;div class="dropdown-item" onclick="go('scene-archive')"&gt;archive&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="content-body"&gt;&lt;h1 class="big-title"&gt;choose a picture.&lt;/h1&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="pane" id="create-right" style="width: 50%;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="create-grid-view" class="archive-grid grid-cols-full" style="padding-top:20px;"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="create-editor-view" class="hidden"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="top-bar-area"&gt;&lt;div class="control-btns"&gt;&lt;button class="circle-btn" onclick="hideEditor()"&gt;←&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="editor-box"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="canvas-container"&gt;&lt;img id="edit-img"&gt;&lt;div id="p-top" class="meme-text t-top"&gt;&lt;/div&gt;&lt;div id="p-bottom" class="meme-text t-bottom"&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="in-nick" class="input-pill" placeholder="nickname"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="in-top" class="input-pill" placeholder="top text" oninput="sync('p-top', this.value)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="in-bottom" class="input-pill" placeholder="bottom text" oninput="sync('p-bottom', this.value)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button class="btn-large" onclick="saveMeme()"&gt;publish&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="scene-archive" class="scene"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="pane" id="archive-left" style="width: 100%;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="top-bar-area"&gt;&lt;div class="nav-pill-wrapper"&gt;&lt;div class="white-pill" onclick="toggleDrop('drop-arch')"&gt;&lt;span&gt;archive&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;div id="drop-arch" class="dropdown-menu"&gt;&lt;div class="dropdown-item" onclick="go('scene-home')"&gt;home&lt;/div&gt;&lt;div class="dropdown-item" onclick="go('scene-create')"&gt;create&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="view-mode-tabs"&gt;&lt;button class="tab-btn active" id="tab-icons" onclick="setMode('icons')"&gt;memes&lt;/button&gt;&lt;button class="tab-btn" id="tab-nicks" onclick="setMode('nicks')"&gt;nicknames&lt;/button&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="archive-list" class="archive-grid grid-cols-full"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="pane hidden" id="archive-right" style="width: 0%;"&gt;&lt;div class="top-bar-area"&gt;&lt;button class="circle-btn" onclick="closeDetail()"&gt;×&lt;/button&gt;&lt;/div&gt;&lt;div class="editor-box"&gt;&lt;div class="canvas-container"&gt;&lt;img id="det-img"&gt;&lt;div id="det-top" class="meme-text t-top"&gt;&lt;/div&gt;&lt;div id="det-bottom" class="meme-text t-bottom"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const firebaseConfig = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>apiKey: "AIzaSyChZzoxs-mGsb4D3jn4zaEEsyzVl5Bx_w8",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>authDomain: "kami-and-diana.firebaseapp.com",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>projectId: "kami-and-diana",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>storageBucket: "kami-and-diana.firebasestorage.app",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>messagingSenderId: "1094907925396",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>appId: "1:1094907925396:web:0771d0a2d9668a6f3df581"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>firebase.initializeApp(firebaseConfig);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const db = firebase.firestore();</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 주용님의 27개 이미지 리스트 (확장자 포함)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const templates = [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>'1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png',<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>'8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg',<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>'14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg',<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>'20.jpeg', '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg',<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>'26.jpeg', '27.jpeg'</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let currentMode = 'icons'; let currentMemes = []; let activeTemplate = '';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const magicPalette = ['#D141C8', '#41D1A5', '#D17C41', '#416ED1', '#D1C841', '#A541D1', '#7CD141', '#E5D3B3', '#FF4B2B', '#FFD700', '#1E90FF', '#32CD32'];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function colorPanes(p1, p2 = null) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const c1 = magicPalette[Math.floor(Math.random() * magicPalette.length)];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(p1).style.backgroundColor = c1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (p2) document.getElementById(p2).style.backgroundColor = magicPalette[Math.floor(Math.random() * magicPalette.length)];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function init() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>await firebase.auth().signInAnonymously();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>colorPanes('pane-home');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>loadData();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>renderTemplates();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function renderTemplates() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const g = document.getElementById('create-grid-view');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>g.innerHTML = templates.map(t =&gt; `&lt;div class="meme-icon-card" onclick="showEditor('${t}')"&gt;&lt;img src="${t}"&gt;&lt;/div&gt;`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function loadData() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>db.collection("exhibition_memes").onSnapshot(snap =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>currentMemes = snap.docs.map(d =&gt; d.data());</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>renderArchive();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function go(id) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.scene').forEach(s =&gt; s.classList.remove('active'));</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(id).classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if(id === 'scene-create') colorPanes('create-left', 'create-right');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if(id === 'scene-archive') colorPanes('archive-left');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function toggleDrop(id) { document.getElementById(id).classList.toggle('show'); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function showEditor(t) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>activeTemplate = t; document.getElementById('edit-img').src = t;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('create-grid-view').classList.add('hidden');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('create-editor-view').classList.remove('hidden');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function hideEditor() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('create-grid-view').classList.remove('hidden');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('create-editor-view').classList.add('hidden');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function sync(id, val) { document.getElementById(id).innerText = val; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function saveMeme() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>await db.collection("exhibition_memes").add({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>template: activeTemplate, nickname: document.getElementById('in-nick').value || 'anon',</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>topText: document.getElementById('in-top').value,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>bottomText: document.getElementById('in-bottom').value,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>timestamp: firebase.firestore.FieldValue.serverTimestamp()</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>go('scene-archive');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function setMode(m) { currentMode = m; renderArchive(); }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function renderArchive() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const list = document.getElementById('archive-list');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>list.innerHTML = currentMemes.map(m =&gt; `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="${currentMode === 'nicks' ? 'nick-card' : 'meme-icon-card'}"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>${currentMode === 'icons' ? `&lt;img src="${m.template}"&gt;` : m.nickname}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>`).join('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>init();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
