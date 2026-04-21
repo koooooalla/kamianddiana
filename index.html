@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>meme factory</title>
-    <!-- Firebase Libraries (v9 compat) -->
+    <!-- Firebase Libraries (Compat v9+) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -41,7 +41,6 @@
             flex: 1; height: 100vh; overflow-y: auto;
             position: relative; scrollbar-width: none;
             transition: background-color 0.4s ease-out, width 0.3s ease;
-            border: none !important;
         }
         .pane::-webkit-scrollbar { display: none; }
 
@@ -56,8 +55,6 @@
             padding: 0 18px; display: flex; justify-content: space-between;
             align-items: center; font-size: var(--ui-font-size);
             cursor: pointer; width: 100%; border: none;
-            appearance: none; -webkit-appearance: none;
-            font-weight: normal;
         }
         .dropdown-menu {
             display: none; position: absolute; top: 50px; left: 0; width: 100%;
@@ -65,106 +62,50 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2000;
         }
         .dropdown-menu.show { display: block; }
-        .dropdown-item {
-            padding: 12px 18px; font-size: var(--ui-font-size);
-            cursor: pointer; border-bottom: 1px solid #f0f0f0;
-            font-weight: normal;
-        }
-        .dropdown-item:hover { background: #f9f9f9; }
+        .dropdown-item { padding: 12px 18px; font-size: var(--ui-font-size); cursor: pointer; border-bottom: 1px solid #f0f0f0; }
 
         .control-btns { display: flex; gap: 6px; }
         .circle-btn {
-            background: rgba(255,255,255,1); border: none !important;
-            width: var(--bar-height); height: var(--bar-height); border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem; cursor: pointer; color: var(--black);
+            background: #fff; border: none; width: var(--bar-height); height: var(--bar-height); 
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer;
         }
 
         .content-body { padding: 40px 20px; }
-        .big-title { 
-            font-size: 3.8rem; 
-            line-height: 0.95; 
-            letter-spacing: -2px; 
-            margin-bottom: 30px; 
-            font-weight: normal;
-        }
+        .big-title { font-size: 3.8rem; line-height: 0.95; letter-spacing: -2px; margin-bottom: 30px; font-weight: normal; }
+
+        /* Create Scene: 원본 스타일 (세로 스크롤 방식) */
+        .create-list { display: flex; flex-direction: column; gap: 30px; padding: 20px; width: 100%; }
+        .create-template-card { width: 100%; aspect-ratio: 1/1; background: #eee; overflow: hidden; cursor: pointer; }
+        .create-template-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .btn-large {
             display: flex; align-items: center; justify-content: center;
-            padding: 0 40px; border-radius: 50px;
-            background: var(--white); border: none !important;
-            font-size: var(--ui-font-size);
-            cursor: pointer; margin-top: 20px; height: var(--bar-height);
-            font-weight: normal;
+            padding: 0 40px; border-radius: 50px; background: var(--white); 
+            border: none; font-size: var(--ui-font-size); cursor: pointer; 
+            margin-top: 20px; height: var(--bar-height); font-weight: normal;
         }
 
-        /* Create Scene Specific: Large Vertical Scrolling Images */
-        .create-list {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            padding: 20px;
-            width: 100%;
-        }
-        .create-template-card {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: #eee;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-        }
-        .create-template-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Archive Styles */
-        .archive-grid { 
-            display: grid; 
-            gap: 15px; 
-            padding: 0 20px 40px 20px; 
-            position: relative; 
-            z-index: 100; 
-        }
+        /* Archive Grid */
+        .archive-grid { display: grid; gap: 15px; padding: 0 20px 40px 20px; }
         .grid-cols-full { grid-template-columns: repeat(5, 1fr); }
         .grid-cols-half { grid-template-columns: repeat(3, 1fr); }
 
-        .nick-card {
-            background: transparent !important; border: none !important;
-            font-size: var(--ui-font-size); line-height: 1.2; padding: 5px 0;
-            cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-
+        /* Editor Area */
         .editor-box { display: flex; flex-direction: column; gap: 16px; padding: 0 20px 60px 20px; align-items: center; }
-        .input-pill {
-            width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px;
-            border: none; font-size: var(--ui-font-size); background: #fff;
-            height: var(--bar-height);
-        }
-        
+        .input-pill { width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px; border: none; font-size: var(--ui-font-size); height: var(--bar-height); }
         .style-group { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; }
         .style-row { display: flex; gap: 12px; align-items: center; }
-        .style-label { font-size: 1rem; opacity: 0.8; white-space: nowrap; }
-        
         .color-input-hidden { width: 32px; height: 32px; border: none; cursor: pointer; background: none; }
-        .font-select {
-            background: white; border: none; border-radius: 50px; padding: 0 20px; 
-            font-size: var(--ui-font-size); width: 100%; height: var(--bar-height);
-        }
+        .font-select { background: white; border: none; border-radius: 50px; padding: 0 20px; font-size: var(--ui-font-size); width: 100%; height: var(--bar-height); }
 
-        .canvas-container {
-            width: 100%; max-width: 400px; aspect-ratio: 1/1; 
-            background: #000; position: relative; overflow: hidden; 
-        }
+        .canvas-container { width: 100%; max-width: 400px; aspect-ratio: 1/1; background: #000; position: relative; overflow: hidden; }
         .canvas-container img { width: 100%; height: 100%; object-fit: cover; }
         .meme-text {
             position: absolute; width: 100%; text-align: center; color: white;
             font-weight: 900; font-size: 2rem; text-transform: uppercase;
             padding: 10px; pointer-events: none; -webkit-text-stroke: 1.5px black;
-            paint-order: stroke fill; word-wrap: break-word;
+            paint-order: stroke fill; word-wrap: break-word; line-height: 1.1;
         }
         .t-top { top: 5px; }
         .t-bottom { bottom: 5px; }
@@ -172,18 +113,12 @@
         .slider-input { flex: 1; accent-color: #000; cursor: pointer; height: 8px; border-radius: 4px; background: #fff; appearance: none; -webkit-appearance: none; }
         .slider-input::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #000; margin-top: -6px; }
 
-        .view-mode-tabs { display: flex; gap: 8px; padding: 0 20px 20px 20px; position: relative; z-index: 1001; }
+        .view-mode-tabs { display: flex; gap: 8px; padding: 0 20px 20px 20px; }
         .tab-btn { background: #fff; border: none; padding: 0 20px; border-radius: 20px; cursor: pointer; height: 36px; }
         .tab-btn.active { text-decoration: underline; }
         
-        .meme-thumbnail-card {
-            aspect-ratio: 1/1; 
-            background: #eee; 
-            overflow: hidden; 
-            cursor: pointer; 
-            position: relative;
-        }
-        .meme-thumbnail-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .meme-thumb-card { aspect-ratio: 1/1; background: #eee; overflow: hidden; cursor: pointer; position: relative; }
+        .meme-thumb-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .hidden { display: none !important; }
     </style>
@@ -247,7 +182,7 @@
             <div class="content-body"><h1 class="big-title">choose a picture and make your own meme.</h1></div>
         </div>
         <div class="pane" id="create-right" style="width: 50%;">
-            <!-- 큰 이미지 세로 스크롤 목록 -->
+            <!-- 템플릿 목록: 위아래 스크롤 방식 -->
             <div id="create-template-list" class="create-list"></div>
             
             <!-- 에디터 영역 -->
@@ -263,20 +198,20 @@
                     </div>
                     <input type="text" id="in-nick" class="input-pill" placeholder="your nickname">
                     <div class="style-group">
-                        <input type="text" id="in-top" class="input-pill" placeholder="top text" oninput="sync('p-top', this.value)" style="max-width:100%">
-                        <input type="text" id="in-bottom" class="input-pill" placeholder="bottom text" oninput="sync('p-bottom', this.value)" style="max-width:100%">
+                        <input type="text" id="in-top" class="input-pill" placeholder="top text" oninput="sync('p-top', this.value)">
+                        <input type="text" id="in-bottom" class="input-pill" placeholder="bottom text" oninput="sync('p-bottom', this.value)">
                         <select id="font-select-input" class="font-select" onchange="updateStyle('font', this.value)">
                             <optgroup label="english"><option value="'Arial Narrow'">Arial Narrow</option><option value="Impact">Impact</option><option value="Anton">Anton</option></optgroup>
                             <optgroup label="korean"><option value="'Black Han Sans'">Black Han Sans</option><option value="'Do Hyeon'">Do Hyeon</option><option value="'Nanum Pen Script'">Nanum Pen Script</option></optgroup>
                         </select>
                         <div class="style-row">
-                            <span class="style-label">fill</span><input type="color" value="#ffffff" oninput="updateStyle('color', this.value)" class="color-input-hidden">
-                            <span class="style-label" style="margin-left:20px;">stroke</span><input type="color" value="#000000" oninput="updateStyle('strokeColor', this.value)" class="color-input-hidden">
+                            <span>fill</span><input type="color" value="#ffffff" oninput="updateStyle('color', this.value)" class="color-input-hidden">
+                            <span style="margin-left:20px;">stroke</span><input type="color" value="#000000" oninput="updateStyle('strokeColor', this.value)" class="color-input-hidden">
                         </div>
-                        <div class="style-row"><span class="style-label">size</span><input type="range" min="1" max="4" step="0.1" value="2" oninput="updateStyle('fontSize', this.value + 'rem')" class="slider-input"></div>
-                        <div class="style-row"><span class="style-label">stroke</span><input type="range" min="0" max="6" step="0.5" value="1.5" oninput="updateStyle('strokeWidth', this.value + 'px')" class="slider-input"></div>
+                        <div class="style-row"><span>size</span><input type="range" min="1" max="4" step="0.1" value="2" oninput="updateStyle('fontSize', this.value + 'rem')" class="slider-input"></div>
+                        <div class="style-row"><span>stroke</span><input type="range" min="0" max="6" step="0.5" value="1.5" oninput="updateStyle('strokeWidth', this.value + 'px')" class="slider-input"></div>
                     </div>
-                    <button class="btn-large" id="btn-publish" onclick="saveMeme()" style="width:100%; max-width:400px; background:#fff;">publish meme</button>
+                    <button class="btn-large" id="btn-publish" onclick="saveMeme()" style="width:100%; max-width:400px;">publish meme</button>
                 </div>
             </div>
         </div>
@@ -309,8 +244,8 @@
     </div>
 
     <script>
-        // --- 환경 변수 로드 ---
-        const fbConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+        // --- 파이어베이스 설정 (주용님 프로젝트) ---
+        const firebaseConfig = {
             apiKey: "AIzaSyChZzoxs-mGsb4D3jn4zaEEsyzVl5Bx_w8",
             authDomain: "kami-and-diana.firebaseapp.com",
             projectId: "kami-and-diana",
@@ -318,24 +253,20 @@
             messagingSenderId: "1094907925396",
             appId: "1:1094907925396:web:0771d0a2d9668a6f3df581"
         };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'factory-exhibition-v3';
-        
-        firebase.initializeApp(fbConfig);
+        firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
         
-        // Rule 1: Strict Path Implementation
-        const getColl = () => db.collection('artifacts').doc(appId).collection('public').doc('data').collection('memes');
+        // 깃허브 배포판을 위한 표준 컬렉션 경로
+        const collectionRef = db.collection('memes');
 
         const templates = ['1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', '20.jpeg', '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg', '26.jpeg', '27.jpeg'];
         const magicPalette = ['#D141C8', '#41D1A5', '#D17C41', '#416ED1', '#D1C841', '#A541D1', '#7CD141', '#E5D3B3', '#FF4B2B', '#FFD700', '#1E90FF', '#32CD32'];
         
-        let currentMode = 'icons'; 
-        let currentMemes = []; 
-        let activeTemplate = ''; 
-        let sceneHistory = ['scene-home'];
+        let currentMode = 'icons'; let currentMemes = []; let activeTemplate = ''; let sceneHistory = ['scene-home'];
         let currentStyles = { color: '#ffffff', font: "'Arial Narrow'", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem' };
 
+        // 템플릿 목록 렌더링
         function renderTemplates() {
             const list = document.getElementById('create-template-list');
             if (!list) return;
@@ -346,31 +277,27 @@
             `).join('');
         }
 
-        // Rule 3: Auth Before Queries
         async function init() {
             renderTemplates();
             colorPanes('pane-home');
-            
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await auth.signInWithCustomToken(__initial_auth_token);
-                } else {
-                    await auth.signInAnonymously();
-                }
-                
-                // 인증 후 리스너 시작
+                // 익명 인증 실행
+                await auth.signInAnonymously();
                 loadData();
-            } catch(e) { console.error("Auth Failure:", e); }
+            } catch(e) { console.error("Firebase Auth Error:", e); }
         }
 
+        // 실시간 데이터 로드
         function loadData() {
-            if (!auth.currentUser) return;
-            getColl().orderBy("timestamp", "desc").onSnapshot(snap => {
+            collectionRef.onSnapshot(snap => {
                 currentMemes = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                // 최신순 정렬
+                currentMemes.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                 renderArchive();
-            }, err => console.error("Listen Error:", err));
+            }, err => console.error("Firestore Error:", err));
         }
 
+        // --- UI 기능들 ---
         function colorPanes(p1, p2 = null) {
             const c1 = magicPalette[Math.floor(Math.random() * magicPalette.length)];
             const el1 = document.getElementById(p1);
@@ -417,38 +344,30 @@
             });
         }
 
-        // --- 핵심 기능: 데이터 저장 (Rule 1 & Rule 3 적용) ---
+        // --- 핵심 기능: 밈 저장 (Publish) ---
         async function saveMeme() {
-            if (!auth.currentUser) {
-                // 인증 안됐을 경우 다시 시도
-                await auth.signInAnonymously();
-                if (!auth.currentUser) return;
-            }
-
             const btn = document.getElementById('btn-publish');
             btn.innerText = "publishing...";
             btn.disabled = true;
 
             try {
-                // Rule 1: /artifacts/{appId}/public/data/memes
-                await getColl().add({
+                // 단순화된 컬렉션 경로에 저장
+                await collectionRef.add({
                     template: activeTemplate,
                     nickname: document.getElementById('in-nick').value || 'anon',
                     topText: document.getElementById('in-top').value,
                     bottomText: document.getElementById('in-bottom').value,
-                    styles: JSON.parse(JSON.stringify(currentStyles)), // 객체 순수화
+                    styles: currentStyles,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                // 성공 시 이동
                 go('scene-archive');
             } catch(e) { 
                 console.error("Critical Publish Error:", e);
-                // 모달 알림 대신 콘솔과 상태로 표시
-                btn.innerText = "Error: try again";
+                btn.innerText = "Error (check Console)";
             } finally {
                 btn.disabled = false;
-                if (btn.innerText !== "Error: try again") btn.innerText = "publish meme";
+                if (btn.innerText !== "Error (check Console)") btn.innerText = "publish meme";
             }
         }
 
@@ -462,7 +381,7 @@
             } else {
                 currentMemes.forEach(m => {
                     const s = m.styles || currentStyles;
-                    const card = document.createElement('div'); card.className = 'meme-thumbnail-card'; card.onclick = () => openDetail(m);
+                    const card = document.createElement('div'); card.className = 'meme-thumb-card'; card.onclick = () => openDetail(m);
                     card.innerHTML = `<img src="${m.template}"><div class="meme-text t-top" style="font-size:0.5rem; font-family:${s.font}; color:${s.color}; -webkit-text-stroke:0.2px ${s.strokeColor}">${m.topText || ''}</div><div class="meme-text t-bottom" style="font-size:0.5rem; font-family:${s.font}; color:${s.color}; -webkit-text-stroke:0.2px ${s.strokeColor}">${m.bottomText || ''}</div>`;
                     list.appendChild(card);
                 });
