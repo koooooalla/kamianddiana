@@ -80,7 +80,6 @@
             font-size: 1.2rem; cursor: pointer; color: var(--black);
         }
 
-        /* Content Areas */
         .content-body { padding: 40px 20px; }
         .big-title { 
             font-size: 3.8rem; 
@@ -96,13 +95,14 @@
             background: var(--white); border: none !important;
             font-size: var(--ui-font-size);
             cursor: pointer; margin-top: 20px; height: var(--bar-height);
+            font-weight: normal;
         }
 
         /* Create Scene Specific: Large Vertical Scrolling Images */
         .create-list {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 30px;
             padding: 20px;
             width: 100%;
         }
@@ -113,7 +113,6 @@
             overflow: hidden;
             cursor: pointer;
             position: relative;
-            border-radius: 0px;
         }
         .create-template-card img {
             width: 100%;
@@ -139,7 +138,6 @@
             cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        /* Editor Styles */
         .editor-box { display: flex; flex-direction: column; gap: 16px; padding: 0 20px 60px 20px; align-items: center; }
         .input-pill {
             width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px;
@@ -249,10 +247,10 @@
             <div class="content-body"><h1 class="big-title">choose a picture and make your own meme.</h1></div>
         </div>
         <div class="pane" id="create-right" style="width: 50%;">
-            <!-- 원본 스타일: 큰 이미지들이 세로로 시원하게 나열된 목록 -->
+            <!-- 큰 이미지 세로 스크롤 목록 -->
             <div id="create-template-list" class="create-list"></div>
             
-            <!-- 에디터 영역 (사진 선택 시 등장) -->
+            <!-- 에디터 영역 -->
             <div id="create-editor-view" class="hidden">
                 <div class="top-bar-area">
                     <div class="control-btns"><button class="circle-btn" onclick="hideEditor()">←</button></div>
@@ -311,8 +309,8 @@
     </div>
 
     <script>
-        // Firebase Configuration (kami-and-diana)
-        const firebaseConfig = {
+        // --- 환경 변수 로드 ---
+        const fbConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyChZzoxs-mGsb4D3jn4zaEEsyzVl5Bx_w8",
             authDomain: "kami-and-diana.firebaseapp.com",
             projectId: "kami-and-diana",
@@ -320,23 +318,24 @@
             messagingSenderId: "1094907925396",
             appId: "1:1094907925396:web:0771d0a2d9668a6f3df581"
         };
-        firebase.initializeApp(firebaseConfig);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'factory-exhibition-v3';
+        
+        firebase.initializeApp(fbConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
         
-        // 엄격한 규칙을 따르는 컬렉션 경로
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'factory-exhibition-v2';
-        const collectionName = "memes";
-        // artifacts/ID/public/data/Collection
-        const getColl = () => db.collection('artifacts').doc(appId).collection('public').doc('data').collection(collectionName);
+        // Rule 1: Strict Path Implementation
+        const getColl = () => db.collection('artifacts').doc(appId).collection('public').doc('data').collection('memes');
 
         const templates = ['1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', '20.jpeg', '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg', '26.jpeg', '27.jpeg'];
         const magicPalette = ['#D141C8', '#41D1A5', '#D17C41', '#416ED1', '#D1C841', '#A541D1', '#7CD141', '#E5D3B3', '#FF4B2B', '#FFD700', '#1E90FF', '#32CD32'];
         
-        let currentMode = 'icons'; let currentMemes = []; let activeTemplate = ''; let sceneHistory = ['scene-home'];
+        let currentMode = 'icons'; 
+        let currentMemes = []; 
+        let activeTemplate = ''; 
+        let sceneHistory = ['scene-home'];
         let currentStyles = { color: '#ffffff', font: "'Arial Narrow'", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem' };
 
-        // 템플릿 목록 렌더링 (원본의 큰 이미지 세로 스크롤 방식)
         function renderTemplates() {
             const list = document.getElementById('create-template-list');
             if (!list) return;
@@ -347,17 +346,19 @@
             `).join('');
         }
 
+        // Rule 3: Auth Before Queries
         async function init() {
             renderTemplates();
             colorPanes('pane-home');
             
             try {
-                // 인증 먼저 완료 (RULE 3 준수)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await auth.signInWithCustomToken(__initial_auth_token);
                 } else {
                     await auth.signInAnonymously();
                 }
+                
+                // 인증 후 리스너 시작
                 loadData();
             } catch(e) { console.error("Auth Failure:", e); }
         }
@@ -416,31 +417,38 @@
             });
         }
 
+        // --- 핵심 기능: 데이터 저장 (Rule 1 & Rule 3 적용) ---
         async function saveMeme() {
             if (!auth.currentUser) {
-                console.error("Not authenticated");
-                return;
+                // 인증 안됐을 경우 다시 시도
+                await auth.signInAnonymously();
+                if (!auth.currentUser) return;
             }
+
             const btn = document.getElementById('btn-publish');
             btn.innerText = "publishing...";
             btn.disabled = true;
 
             try {
+                // Rule 1: /artifacts/{appId}/public/data/memes
                 await getColl().add({
                     template: activeTemplate,
                     nickname: document.getElementById('in-nick').value || 'anon',
                     topText: document.getElementById('in-top').value,
                     bottomText: document.getElementById('in-bottom').value,
-                    styles: currentStyles,
+                    styles: JSON.parse(JSON.stringify(currentStyles)), // 객체 순수화
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
+                
+                // 성공 시 이동
                 go('scene-archive');
             } catch(e) { 
-                console.error("Publish Error:", e);
-                alert("publishing failed. check your firestore rules.");
+                console.error("Critical Publish Error:", e);
+                // 모달 알림 대신 콘솔과 상태로 표시
+                btn.innerText = "Error: try again";
             } finally {
-                btn.innerText = "publish meme";
                 btn.disabled = false;
+                if (btn.innerText !== "Error: try again") btn.innerText = "publish meme";
             }
         }
 
