@@ -111,6 +111,8 @@
             position: relative; 
             z-index: 100; 
         }
+        /* 그리드 컬럼 정의 추가 */
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
         .grid-cols-full { grid-template-columns: repeat(5, 1fr); }
         .grid-cols-half { grid-template-columns: repeat(3, 1fr); }
 
@@ -291,7 +293,7 @@
             </div>
         </div>
         <div class="pane" id="create-right" style="width: 50%;">
-            <!-- 템플릿 선택 그리드 -->
+            <!-- 템플릿 선택 그리드 (grid-cols-4 클래스 정의됨) -->
             <div id="create-grid-view" class="archive-grid grid-cols-4" style="padding-top:20px;"></div>
             
             <!-- 밈 에디터 뷰 -->
@@ -302,7 +304,7 @@
                 </div>
                 <div class="editor-box">
                     <div class="canvas-container" id="editor-canvas-wrap">
-                        <img id="edit-img" src="">
+                        <img id="edit-img" src="" onerror="this.src='https://via.placeholder.com/400?text=Image+Loading...'">
                         <div id="p-top" class="meme-text t-top"></div>
                         <div id="p-bottom" class="meme-text t-bottom"></div>
                     </div>
@@ -391,7 +393,7 @@
             </div>
             <div class="editor-box">
                 <div class="canvas-container" style="max-width: 400px; margin-top: 40px;">
-                    <img id="det-img" src="">
+                    <img id="det-img" src="" onerror="this.src='https://via.placeholder.com/400?text=Meme+Template'">
                     <div id="det-top" class="meme-text t-top"></div>
                     <div id="det-bottom" class="meme-text t-bottom"></div>
                 </div>
@@ -401,7 +403,7 @@
     </div>
 
     <script>
-        // Firebase Configuration
+        // Firebase 환경 변수 및 설정
         const firebaseConfig = {
             apiKey: "AIzaSyChZzoxs-mGsb4D3jn4zaEEsyzVl5Bx_w8",
             authDomain: "kami-and-diana.firebaseapp.com",
@@ -412,9 +414,12 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const collectionPath = "memes";
+        
+        // 캔버스 환경을 위한 엄격한 경로 설정
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'meme-factory-v2';
+        const collectionPath = `artifacts/${appId}/public/data/memes`;
 
-        // 주용님이 업로드한 27개 이미지 파일명
+        // 이미지 템플릿 (27개)
         const templates = [
             '1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', 
             '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', 
@@ -429,7 +434,6 @@
         let currentMemes = [];
         let activeTemplate = '';
         let sceneHistory = ['scene-home'];
-
         let currentStyles = {
             color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem'
         };
@@ -449,35 +453,42 @@
 
         async function init() {
             try {
-                await firebase.auth().signInAnonymously();
+                // 인증 먼저 완료 후 데이터 로드
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await firebase.auth().signInWithCustomToken(__initial_auth_token);
+                } else {
+                    await firebase.auth().signInAnonymously();
+                }
                 colorPanes('pane-home');
                 loadData();
                 renderTemplates();
-            } catch(e) { console.error("Auth Error:", e); }
+            } catch(e) { console.error("Initialization Error:", e); }
         }
 
         // 템플릿 이미지를 그리드에 렌더링
         function renderTemplates() {
             const g = document.getElementById('create-grid-view');
             g.innerHTML = templates.map(t => `
-                <div class="meme-icon-card" onclick="showEditor('${t}')"><img src="${t}"></div>
+                <div class="meme-icon-card" onclick="showEditor('${t}')">
+                    <img src="${t}" onerror="this.style.display='none'; this.parentElement.style.background='#ccc';">
+                    <span style="position:absolute; bottom:5px; left:5px; font-size:10px; color:#666;">${t}</span>
+                </div>
             `).join('');
         }
 
-        // Firestore에서 밈 데이터 불러오기
+        // Firestore에서 밈 데이터 실시간 감시
         function loadData() {
-            db.collection(collectionPath).orderBy("timestamp", "desc").onSnapshot(snap => {
+            db.collection(collectionPath).onSnapshot(snap => {
                 currentMemes = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                currentMemes.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                 renderArchive();
-            }, err => console.error("Firestore Error:", err));
+            }, err => console.error("Firestore Listen Error:", err));
         }
 
-        // 씬 전환
         function go(id) {
             if (sceneHistory[sceneHistory.length - 1] !== id) sceneHistory.push(id);
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
             if (id === 'scene-home') colorPanes('pane-home');
             if (id === 'scene-create') { hideEditor(); colorPanes('create-left', 'create-right'); }
             if (id === 'scene-archive') { closeDetail(); colorPanes('archive-left'); renderArchive(); }
@@ -492,16 +503,15 @@
         }
 
         function toggleDrop(id) {
-            document.querySelectorAll('.dropdown-menu').forEach(m => {
-                if(m.id === id) m.classList.toggle('show');
-                else m.classList.remove('show');
-            });
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.id === id ? m.classList.toggle('show') : m.classList.remove('show'));
         }
 
-        // 사진 선택 시 에디터 노출
         function showEditor(t) {
             activeTemplate = t;
-            document.getElementById('edit-img').src = t;
+            const editImg = document.getElementById('edit-img');
+            editImg.src = t;
+            
+            // 입력창 및 미리보기 초기화
             document.getElementById('in-nick').value = '';
             document.getElementById('in-top').value = '';
             document.getElementById('in-bottom').value = '';
@@ -548,7 +558,7 @@
                 go('scene-archive');
             } catch(e) { 
                 console.error("Save Error:", e);
-                alert("save failed. check firestore rules.");
+                alert("Firestore Error. Check path rules.");
             }
         }
 
@@ -559,7 +569,6 @@
             renderArchive();
         }
 
-        // 아카이브 리스트 렌더링
         function renderArchive() {
             const list = document.getElementById('archive-list');
             list.innerHTML = '';
@@ -570,13 +579,13 @@
                 `).join('');
             } else {
                 currentMemes.forEach((m) => {
-                    const s = m.styles || currentStyles;
+                    const s = m.styles || { color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '1rem' };
                     const el = document.createElement('div');
                     el.className = 'meme-icon-card';
                     el.onclick = () => openDetail(m);
                     
                     el.innerHTML = `
-                        <img src="${m.template}">
+                        <img src="${m.template}" onerror="this.style.display='none';">
                         <div class="meme-text t-top" style="font-size: 0.5rem; font-family: ${s.font}; color: ${s.color}; -webkit-text-stroke: 0.2px ${s.strokeColor};">${m.topText || ''}</div>
                         <div class="meme-text t-bottom" style="font-size: 0.5rem; font-family: ${s.font}; color: ${s.color}; -webkit-text-stroke: 0.2px ${s.strokeColor};">${m.bottomText || ''}</div>
                     `;
@@ -585,7 +594,6 @@
             }
         }
 
-        // 상세 보기
         function openDetail(data) {
             const left = document.getElementById('archive-left');
             const right = document.getElementById('archive-right');
@@ -596,17 +604,14 @@
             right.classList.remove('hidden');
             list.className = 'archive-grid grid-cols-half';
 
-            const detTop = document.getElementById('det-top');
-            const detBot = document.getElementById('det-bottom');
+            const detTop = document.getElementById('det-top'), detBot = document.getElementById('det-bottom');
             document.getElementById('det-img').src = data.template;
-            detTop.innerText = data.topText || ''; 
-            detBot.innerText = data.bottomText || '';
+            detTop.innerText = data.topText || ''; detBot.innerText = data.bottomText || '';
             document.getElementById('det-author-name').innerText = data.nickname || 'anonymous';
             
-            const s = data.styles || currentStyles;
+            const s = data.styles || { color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem' };
             [detTop, detBot].forEach(t => {
-                t.style.color = s.color; 
-                t.style.fontFamily = s.font;
+                t.style.color = s.color; t.style.fontFamily = s.font;
                 t.style.fontSize = s.fontSize || '2rem';
                 t.style.webkitTextStroke = `${s.strokeWidth} ${s.strokeColor}`;
             });
@@ -630,9 +635,7 @@
         }
 
         window.onclick = (e) => {
-            if (!e.target.closest('.nav-pill-wrapper')) {
-                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-            }
+            if (!e.target.closest('.nav-pill-wrapper')) document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
         };
 
         init();
