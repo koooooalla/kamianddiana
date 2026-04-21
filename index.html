@@ -81,6 +81,7 @@
             box-shadow: none !important;
         }
 
+        /* Content Areas */
         .content-body { padding: 40px 20px; }
         .big-title { 
             font-size: 3.8rem; 
@@ -290,7 +291,10 @@
             </div>
         </div>
         <div class="pane" id="create-right" style="width: 50%;">
+            <!-- 템플릿 선택 그리드 -->
             <div id="create-grid-view" class="archive-grid grid-cols-4" style="padding-top:20px;"></div>
+            
+            <!-- 밈 에디터 뷰 -->
             <div id="create-editor-view" class="hidden">
                 <div class="top-bar-area">
                     <div class="nav-pill-wrapper"></div>
@@ -410,7 +414,7 @@
         const db = firebase.firestore();
         const collectionPath = "memes";
 
-        // 주용님의 27개 이미지 리스트 (파일 이름 정확히 반영)
+        // 주용님이 업로드한 27개 이미지 파일명
         const templates = [
             '1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', 
             '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', 
@@ -452,6 +456,7 @@
             } catch(e) { console.error("Auth Error:", e); }
         }
 
+        // 템플릿 이미지를 그리드에 렌더링
         function renderTemplates() {
             const g = document.getElementById('create-grid-view');
             g.innerHTML = templates.map(t => `
@@ -459,6 +464,7 @@
             `).join('');
         }
 
+        // Firestore에서 밈 데이터 불러오기
         function loadData() {
             db.collection(collectionPath).orderBy("timestamp", "desc").onSnapshot(snap => {
                 currentMemes = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -466,10 +472,12 @@
             }, err => console.error("Firestore Error:", err));
         }
 
+        // 씬 전환
         function go(id) {
             if (sceneHistory[sceneHistory.length - 1] !== id) sceneHistory.push(id);
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
             if (id === 'scene-home') colorPanes('pane-home');
             if (id === 'scene-create') { hideEditor(); colorPanes('create-left', 'create-right'); }
             if (id === 'scene-archive') { closeDetail(); colorPanes('archive-left'); renderArchive(); }
@@ -484,17 +492,22 @@
         }
 
         function toggleDrop(id) {
-            document.querySelectorAll('.dropdown-menu').forEach(m => m.id === id ? m.classList.toggle('show') : m.classList.remove('show'));
+            document.querySelectorAll('.dropdown-menu').forEach(m => {
+                if(m.id === id) m.classList.toggle('show');
+                else m.classList.remove('show');
+            });
         }
 
+        // 사진 선택 시 에디터 노출
         function showEditor(t) {
             activeTemplate = t;
+            document.getElementById('edit-img').src = t;
             document.getElementById('in-nick').value = '';
             document.getElementById('in-top').value = '';
             document.getElementById('in-bottom').value = '';
             document.getElementById('p-top').innerText = '';
             document.getElementById('p-bottom').innerText = '';
-            document.getElementById('edit-img').src = t;
+            
             document.getElementById('create-grid-view').classList.add('hidden');
             document.getElementById('create-editor-view').classList.remove('hidden');
             colorPanes('create-left', 'create-right');
@@ -514,19 +527,29 @@
                 if (prop === 'color') t.style.color = val;
                 if (prop === 'font') t.style.fontFamily = val;
                 if (prop === 'fontSize') t.style.fontSize = val;
-                if (prop === 'strokeWidth' || prop === 'strokeColor') t.style.webkitTextStroke = `${currentStyles.strokeWidth} ${currentStyles.strokeColor}`;
+                if (prop === 'strokeWidth' || prop === 'strokeColor') {
+                    t.style.webkitTextStroke = `${currentStyles.strokeWidth} ${currentStyles.strokeColor}`;
+                }
             });
         }
 
+        // 밈 저장 (발행)
         async function saveMeme() {
             const nick = document.getElementById('in-nick').value || 'anonymous';
-            await db.collection(collectionPath).add({
-                template: activeTemplate, nickname: nick,
-                topText: document.getElementById('in-top').value,
-                bottomText: document.getElementById('in-bottom').value,
-                styles: currentStyles, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            go('scene-archive');
+            try {
+                await db.collection(collectionPath).add({
+                    template: activeTemplate,
+                    nickname: nick,
+                    topText: document.getElementById('in-top').value,
+                    bottomText: document.getElementById('in-bottom').value,
+                    styles: currentStyles,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                go('scene-archive');
+            } catch(e) { 
+                console.error("Save Error:", e);
+                alert("save failed. check firestore rules.");
+            }
         }
 
         function setMode(m) {
@@ -536,6 +559,7 @@
             renderArchive();
         }
 
+        // 아카이브 리스트 렌더링
         function renderArchive() {
             const list = document.getElementById('archive-list');
             list.innerHTML = '';
@@ -546,7 +570,7 @@
                 `).join('');
             } else {
                 currentMemes.forEach((m) => {
-                    const s = m.styles || { color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '1rem' };
+                    const s = m.styles || currentStyles;
                     const el = document.createElement('div');
                     el.className = 'meme-icon-card';
                     el.onclick = () => openDetail(m);
@@ -561,6 +585,7 @@
             }
         }
 
+        // 상세 보기
         function openDetail(data) {
             const left = document.getElementById('archive-left');
             const right = document.getElementById('archive-right');
@@ -571,14 +596,17 @@
             right.classList.remove('hidden');
             list.className = 'archive-grid grid-cols-half';
 
-            const detTop = document.getElementById('det-top'), detBot = document.getElementById('det-bottom');
+            const detTop = document.getElementById('det-top');
+            const detBot = document.getElementById('det-bottom');
             document.getElementById('det-img').src = data.template;
-            detTop.innerText = data.topText || ''; detBot.innerText = data.bottomText || '';
+            detTop.innerText = data.topText || ''; 
+            detBot.innerText = data.bottomText || '';
             document.getElementById('det-author-name').innerText = data.nickname || 'anonymous';
             
-            const s = data.styles || { color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem' };
+            const s = data.styles || currentStyles;
             [detTop, detBot].forEach(t => {
-                t.style.color = s.color; t.style.fontFamily = s.font;
+                t.style.color = s.color; 
+                t.style.fontFamily = s.font;
                 t.style.fontSize = s.fontSize || '2rem';
                 t.style.webkitTextStroke = `${s.strokeWidth} ${s.strokeColor}`;
             });
@@ -602,7 +630,9 @@
         }
 
         window.onclick = (e) => {
-            if (!e.target.closest('.nav-pill-wrapper')) document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            if (!e.target.closest('.nav-pill-wrapper')) {
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            }
         };
 
         init();
