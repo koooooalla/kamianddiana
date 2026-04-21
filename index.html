@@ -76,7 +76,6 @@
             margin-bottom: 15px; 
             font-weight: normal; 
         }
-        /* 한글 제목 전용 스타일: 시각적 균형을 위해 영어보다 작게 설정 */
         .big-title-ko {
             font-size: 2.6rem;
             line-height: 1.2;
@@ -91,7 +90,6 @@
             font-weight: normal;
         }
 
-        /* Create List Style (Large Vertical Scroll) */
         .create-list { display: flex; flex-direction: column; gap: 30px; padding: 20px; width: 100%; }
         .create-template-card { width: 100%; aspect-ratio: 1/1; background: #eee; overflow: hidden; cursor: pointer; }
         .create-template-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -103,7 +101,6 @@
             margin-top: 20px; height: var(--bar-height); font-weight: normal;
         }
 
-        /* Archive Grid */
         .archive-grid { display: grid; gap: 15px; padding: 0 20px 40px 20px; position: relative; z-index: 100; }
         .grid-cols-full { grid-template-columns: repeat(5, 1fr); }
         .grid-cols-half { grid-template-columns: repeat(3, 1fr); }
@@ -114,7 +111,6 @@
             cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        /* Editor Area */
         .editor-box { display: flex; flex-direction: column; gap: 16px; padding: 0 20px 60px 20px; align-items: center; }
         .input-pill { width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px; border: none; font-size: var(--ui-font-size); height: var(--bar-height); }
         .style-group { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; }
@@ -259,7 +255,11 @@
                 </div>
                 <div class="control-btns"><button class="circle-btn" onclick="historyBack()">←</button></div>
             </div>
-            <div class="content-body"><h1 class="big-title" style="font-size: 2.4rem;">your humor proves we are never truly apart.</h1></div>
+            <div class="content-body">
+                <!-- 한/영 간격 확보를 위해 margin-bottom을 30px로 상향 조정 -->
+                <h1 class="big-title" style="font-size: 2.2rem; margin-bottom: 30px;">you might feel like your humor is one-of-a-kind, but our data shows that great minds really do think alike. we are all more connected—and perhaps less unique—than we imagine. explore the patterns and see where you fit in.</h1>
+                <h1 class="big-title-ko" style="font-size: 1.8rem;">사실 우리의 생각은 놀라울 정도로 닮아 있습니다. 우리는 생각보다 서로 덜 특별하고, 더 많이 연결되어 있습니다. 당신의 생각이 어떤 집단적 패턴 속에 있는지 직접 확인해 보세요.</h1>
+            </div>
             <div class="view-mode-tabs"><button class="tab-btn active" id="tab-icons" onclick="setMode('icons')">memes</button><button class="tab-btn" id="tab-nicks" onclick="setMode('nicks')">nicknames</button></div>
             <div id="archive-list" class="archive-grid grid-cols-full"></div>
         </div>
