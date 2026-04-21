@@ -12,33 +12,65 @@
         :root { --white: #FFFFFF; --black: #000000; --bar-height: 46px; --ui-font-size: 1.1rem; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Arial Narrow", Arial, sans-serif; -webkit-tap-highlight-color: transparent; outline: none !important; }
         body, html { width: 100%; height: 100vh; color: var(--black); overflow: hidden; background: #fff; -webkit-font-smoothing: antialiased; text-transform: lowercase; }
+        
         .scene { display: none; width: 100vw; height: 100vh; position: relative; }
         .scene.active { display: flex; }
+
         .pane { flex: 1; height: 100vh; overflow-y: auto; position: relative; scrollbar-width: none; transition: background-color 0.4s ease-out, width 0.3s ease; border: none !important; }
         .pane::-webkit-scrollbar { display: none; }
+
         .top-bar-area { display: flex; align-items: center; gap: 8px; padding: 12px 15px; position: sticky; top: 0; z-index: 1000; }
         .nav-pill-wrapper { position: relative; flex: 1; }
         .white-pill { background: var(--white); border-radius: 50px; height: var(--bar-height); padding: 0 18px; display: flex; justify-content: space-between; align-items: center; font-size: var(--ui-font-size); cursor: pointer; width: 100%; border: none; appearance: none; -webkit-appearance: none; font-weight: normal; }
+        
         .dropdown-menu { display: none; position: absolute; top: 50px; left: 0; width: 100%; background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2000; }
         .dropdown-menu.show { display: block; }
         .dropdown-item { padding: 12px 18px; font-size: var(--ui-font-size); cursor: pointer; border-bottom: 1px solid #f0f0f0; font-weight: normal; }
         .dropdown-item:hover { background: #f9f9f9; }
+
         .control-btns { display: flex; gap: 6px; }
         .circle-btn { background: rgba(255,255,255,1); border: none !important; width: var(--bar-height); height: var(--bar-height); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; cursor: pointer; color: var(--black); box-shadow: none !important; }
+
         .content-body { padding: 40px 20px; }
         .big-title { font-size: 3.8rem; line-height: 0.95; letter-spacing: -2px; margin-bottom: 30px; font-weight: normal; }
+
         .btn-large { display: flex; align-items: center; justify-content: center; padding: 0 40px; border-radius: 50px; background: var(--white); border: none !important; font-size: var(--ui-font-size); cursor: pointer; margin-top: 20px; font-family: inherit; color: var(--black); height: var(--bar-height); width: auto; font-weight: normal; box-shadow: none !important; }
+
         .archive-grid { display: grid; gap: 15px; padding: 0 20px 40px 20px; position: relative; z-index: 100; }
         .grid-cols-full { grid-template-columns: repeat(5, 1fr); }
+        .grid-cols-half { grid-template-columns: repeat(3, 1fr); }
+
+        .nick-card { background: transparent !important; border: none !important; font-size: var(--ui-font-size); line-height: 1.2; padding: 5px 0; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-weight: normal; color: var(--black); box-shadow: none !important; margin-left: 0; }
         .meme-icon-card { aspect-ratio: 1/1; background: #eee; border-radius: 0px; overflow: hidden; cursor: pointer; border: none; position: relative; }
         .meme-icon-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
         .editor-box { display: flex; flex-direction: column; gap: 16px; padding: 0 20px 60px 20px; align-items: center; }
         .input-pill { width: 100%; max-width: 400px; padding: 0 20px; border-radius: 50px; border: none; font-size: var(--ui-font-size); background: #fff; font-family: inherit; height: var(--bar-height); font-weight: normal; }
+        
+        .style-group { width: 100%; max-width: 400px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+        .style-row { display: flex; gap: 12px; align-items: center; justify-content: flex-start; }
+        .style-label { font-size: 1rem; opacity: 0.8; white-space: nowrap; font-weight: normal; }
+        
+        .color-picker-item { display: flex; align-items: center; gap: 6px; }
+        .color-input-hidden { width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer; }
+        .color-input-hidden::-webkit-color-swatch-wrapper { padding: 0; }
+        .color-input-hidden::-webkit-color-swatch { border: none; border-radius: 2px; }
+
+        .font-select-wrapper { position: relative; width: 100%; }
+        .font-select { background: white; border: none; border-radius: 50px; padding: 0 20px; font-size: var(--ui-font-size); width: 100%; text-transform: none; appearance: none; -webkit-appearance: none; cursor: pointer; height: var(--bar-height); font-weight: normal; }
+        .font-select-arrow { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 1rem; }
+
         .canvas-container { width: 100%; max-width: 400px; aspect-ratio: 1/1; background: #000; position: relative; overflow: hidden; flex-shrink: 0; border: none; }
         .canvas-container img { width: 100%; height: 100%; object-fit: cover; }
         .meme-text { position: absolute; width: 100%; text-align: center; color: white; font-weight: 900; font-size: 2rem; text-transform: uppercase; padding: 10px; pointer-events: none; -webkit-text-stroke: 1.5px black; paint-order: stroke fill; line-height: 1.1; word-wrap: break-word; }
         .t-top { top: 5px; }
         .t-bottom { bottom: 5px; }
+
+        .slider-row { display: flex; align-items: center; gap: 12px; width: 100%; }
+        .slider-label-box { width: 80px; flex-shrink: 0; }
+        .slider-input { flex: 1; accent-color: #000; cursor: pointer; height: 8px; border-radius: 4px; background: #fff; appearance: none; -webkit-appearance: none; border: none; }
+        .slider-input::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #000; margin-top: -6px; border: none; }
+
         .view-mode-tabs { display: flex; gap: 8px; padding: 0 20px 20px 20px; position: relative; z-index: 1001; }
         .tab-btn { background: rgba(255,255,255,1); border: none !important; padding: 0 20px; border-radius: 20px; cursor: pointer; font-size: var(--ui-font-size); height: 36px; font-weight: normal; box-shadow: none !important; }
         .tab-btn.active { background: var(--white); text-decoration: underline; }
@@ -56,12 +88,36 @@
                         <div class="dropdown-item" onclick="go('scene-home')">home</div>
                         <div class="dropdown-item" onclick="go('scene-create')">create</div>
                         <div class="dropdown-item" onclick="go('scene-archive')">archive</div>
+                        <div class="dropdown-item" onclick="go('scene-about')">about</div>
                     </div>
                 </div>
             </div>
             <div class="content-body">
-                <h1 class="big-title">welcome to meme factory.</h1>
+                <h1 class="big-title">welcome to meme factory. an interactive space to play with memes and map our shared humor.</h1>
                 <button class="btn-large" onclick="go('scene-create')">play</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-about" class="scene">
+        <div class="pane" id="pane-about">
+            <div class="top-bar-area">
+                <div class="nav-pill-wrapper">
+                    <div class="white-pill" onclick="toggleDrop('drop-about')"><span>about</span><span>↓</span></div>
+                    <div id="drop-about" class="dropdown-menu">
+                        <div class="dropdown-item" onclick="go('scene-home')">home</div>
+                        <div class="dropdown-item" onclick="go('scene-create')">create</div>
+                        <div class="dropdown-item" onclick="go('scene-archive')">archive</div>
+                    </div>
+                </div>
+                <div class="control-btns">
+                    <button class="circle-btn" onclick="historyBack()">←</button>
+                    <button class="circle-btn" onclick="go('scene-home')">×</button>
+                </div>
+            </div>
+            <div class="content-body">
+                <h1 class="big-title" style="font-size: 2.8rem; line-height: 1.1;">meme factory explores the phenomenon of human non-individuality. we believe that if everyone were truly unique, memes would not exist.</h1>
+                <div style="margin-top: 40px; font-weight: normal; opacity: 0.9; font-size: 1.2rem;">credits: kamilya & diana (2026)</div>
             </div>
         </div>
     </div>
@@ -74,21 +130,39 @@
                     <div id="drop-create" class="dropdown-menu">
                         <div class="dropdown-item" onclick="go('scene-home')">home</div>
                         <div class="dropdown-item" onclick="go('scene-archive')">archive</div>
+                        <div class="dropdown-item" onclick="go('scene-about')">about</div>
                     </div>
                 </div>
             </div>
-            <div class="content-body"><h1 class="big-title">choose a picture.</h1></div>
+            <div class="content-body"><h1 class="big-title">choose a picture and make your own meme.</h1></div>
         </div>
         <div class="pane" id="create-right" style="width: 50%;">
             <div id="create-grid-view" class="archive-grid grid-cols-full" style="padding-top:20px;"></div>
             <div id="create-editor-view" class="hidden">
                 <div class="top-bar-area"><div class="control-btns"><button class="circle-btn" onclick="hideEditor()">←</button></div></div>
                 <div class="editor-box">
-                    <div class="canvas-container"><img id="edit-img"><div id="p-top" class="meme-text t-top"></div><div id="p-bottom" class="meme-text t-bottom"></div></div>
-                    <input type="text" id="in-nick" class="input-pill" placeholder="nickname">
-                    <input type="text" id="in-top" class="input-pill" placeholder="top text" oninput="sync('p-top', this.value)">
-                    <input type="text" id="in-bottom" class="input-pill" placeholder="bottom text" oninput="sync('p-bottom', this.value)">
-                    <button class="btn-large" onclick="saveMeme()">publish</button>
+                    <div class="canvas-container" id="editor-canvas-wrap">
+                        <img id="edit-img" src=""><div id="p-top" class="meme-text t-top"></div><div id="p-bottom" class="meme-text t-bottom"></div>
+                    </div>
+                    <input type="text" id="in-nick" class="input-pill" placeholder="your nickname">
+                    <div class="style-group">
+                        <input type="text" id="in-top" class="input-pill" placeholder="top text" oninput="sync('p-top', this.value)" style="max-width:100%">
+                        <input type="text" id="in-bottom" class="input-pill" placeholder="bottom text" oninput="sync('p-bottom', this.value)" style="max-width:100%">
+                        <div class="font-select-wrapper">
+                            <select id="font-select-input" class="font-select" onchange="updateStyle('font', this.value)">
+                                <optgroup label="english"><option value="'Arial Narrow', Arial, sans-serif">Arial Narrow</option><option value="Impact">Impact</option><option value="Anton">Anton</option><option value="Bangers">Bangers</option></optgroup>
+                                <optgroup label="korean"><option value="'Black Han Sans', sans-serif">Black Han Sans</option><option value="'Do Hyeon', sans-serif">Do Hyeon</option></optgroup>
+                            </select>
+                            <span class="font-select-arrow">↓</span>
+                        </div>
+                        <div class="style-row">
+                            <div class="color-picker-item"><span class="style-label">fill</span><input type="color" id="fill-input" value="#ffffff" oninput="updateStyle('color', this.value)" class="color-input-hidden"></div>
+                            <div class="color-picker-item" style="margin-left: 20px;"><span class="style-label">stroke</span><input type="color" id="stroke-input" value="#000000" oninput="updateStyle('strokeColor', this.value)" class="color-input-hidden"></div>
+                        </div>
+                        <div class="slider-row"><div class="slider-label-box"><span class="style-label">text size</span></div><input type="range" id="size-input" class="slider-input" min="1" max="4" step="0.1" value="2" oninput="updateStyle('fontSize', this.value + 'rem')"></div>
+                        <div class="slider-row"><div class="slider-label-box"><span class="style-label">stroke size</span></div><input type="range" id="stroke-size-input" class="slider-input" min="0" max="6" step="0.5" value="1.5" oninput="updateStyle('strokeWidth', this.value + 'px')"></div>
+                    </div>
+                    <button class="btn-large" onclick="saveMeme()">publish meme</button>
                 </div>
             </div>
         </div>
@@ -97,23 +171,17 @@
     <div id="scene-archive" class="scene">
         <div class="pane" id="archive-left" style="width: 100%;">
             <div class="top-bar-area">
-                <div class="nav-pill-wrapper">
-                    <div class="white-pill" onclick="toggleDrop('drop-arch')"><span>archive</span><span>↓</span></div>
-                    <div id="drop-arch" class="dropdown-menu">
-                        <div class="dropdown-item" onclick="go('scene-home')">home</div>
-                        <div class="dropdown-item" onclick="go('scene-create')">create</div>
-                    </div>
-                </div>
+                <div class="nav-pill-wrapper"><div class="white-pill" onclick="toggleDrop('drop-arch')"><span>archive</span><span>↓</span></div><div id="drop-arch" class="dropdown-menu"><div class="dropdown-item" onclick="go('scene-home')">home</div><div class="dropdown-item" onclick="go('scene-create')">create</div><div class="dropdown-item" onclick="go('scene-about')">about</div></div></div>
             </div>
-            <div class="view-mode-tabs">
-                <button class="tab-btn active" id="tab-icons" onclick="setMode('icons')">memes</button>
-                <button class="tab-btn" id="tab-nicks" onclick="setMode('nicks')">nicknames</button>
-            </div>
+            <div class="view-mode-tabs"><button class="tab-btn active" id="tab-icons" onclick="setMode('icons')">memes</button><button class="tab-btn" id="tab-nicks" onclick="setMode('nicks')">nicknames</button></div>
             <div id="archive-list" class="archive-grid grid-cols-full"></div>
         </div>
         <div class="pane hidden" id="archive-right" style="width: 0%;">
-             <div class="top-bar-area"><button class="circle-btn" onclick="closeDetail()">×</button></div>
-             <div class="editor-box"><div class="canvas-container"><img id="det-img"><div id="det-top" class="meme-text t-top"></div><div id="det-bottom" class="meme-text t-bottom"></div></div></div>
+            <div class="top-bar-area"><div class="control-btns"><button class="circle-btn" onclick="closeDetail()">×</button></div></div>
+            <div class="editor-box">
+                <div class="canvas-container" style="margin-top: 40px;"><img id="det-img"><div id="det-top" class="meme-text t-top"></div><div id="det-bottom" class="meme-text t-bottom"></div></div>
+                <div id="det-meta" style="margin-top: 20px; font-size: 1.2rem; text-align: center;"></div>
+            </div>
         </div>
     </div>
 
@@ -126,85 +194,93 @@
             messagingSenderId: "1094907925396",
             appId: "1:1094907925396:web:0771d0a2d9668a6f3df581"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        const templates = [
-            '1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', 
-            '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', 
-            '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', 
-            '20.jpeg', '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg', 
-            '26.jpeg', '27.jpeg'
-        ];
-
-        let currentMode = 'icons'; let currentMemes = []; let activeTemplate = '';
+        const templates = ['1.jpg', '2.png', '3.jpeg', '4.jpeg', '5.jpg', '6.png', '7.png', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', '20.jpeg', '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg', '26.jpeg', '27.jpeg'];
         const magicPalette = ['#D141C8', '#41D1A5', '#D17C41', '#416ED1', '#D1C841', '#A541D1', '#7CD141', '#E5D3B3', '#FF4B2B', '#FFD700', '#1E90FF', '#32CD32'];
+        let currentMode = 'icons'; let currentMemes = []; let activeTemplate = ''; let sceneHistory = ['scene-home'];
+        let currentStyles = { color: '#ffffff', font: "'Arial Narrow', Arial, sans-serif", strokeWidth: '1.5px', strokeColor: '#000000', fontSize: '2rem' };
 
+        async function init() {
+            try { await firebase.auth().signInAnonymously(); colorPanes('pane-home'); loadData(); renderTemplates(); } catch(e) { console.error(e); }
+        }
         function colorPanes(p1, p2 = null) {
             const c1 = magicPalette[Math.floor(Math.random() * magicPalette.length)];
             document.getElementById(p1).style.backgroundColor = c1;
-            if (p2) document.getElementById(p2).style.backgroundColor = magicPalette[Math.floor(Math.random() * magicPalette.length)];
+            if (p2) document.getElementById(p2).style.backgroundColor = magicPalette.filter(c => c !== c1)[Math.floor(Math.random() * (magicPalette.length - 1))];
         }
-
-        async function init() {
-            await firebase.auth().signInAnonymously();
-            colorPanes('pane-home');
-            loadData();
-            renderTemplates();
-        }
-
         function renderTemplates() {
             const g = document.getElementById('create-grid-view');
             g.innerHTML = templates.map(t => `<div class="meme-icon-card" onclick="showEditor('${t}')"><img src="${t}"></div>`).join('');
         }
-
         function loadData() {
-            db.collection("exhibition_memes").onSnapshot(snap => {
-                currentMemes = snap.docs.map(d => d.data());
+            db.collection("memes").orderBy("timestamp", "desc").onSnapshot(snap => {
+                currentMemes = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 renderArchive();
             });
         }
-
         function go(id) {
+            if (sceneHistory[sceneHistory.length - 1] !== id) sceneHistory.push(id);
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'scene-create') colorPanes('create-left', 'create-right');
-            if(id === 'scene-archive') colorPanes('archive-left');
+            if (id === 'scene-home') colorPanes('pane-home');
+            if (id === 'scene-create') { hideEditor(); colorPanes('create-left', 'create-right'); }
+            if (id === 'scene-archive') { closeDetail(); colorPanes('archive-left'); renderArchive(); }
+            if (id === 'scene-about') colorPanes('pane-about');
         }
-
-        function toggleDrop(id) { document.getElementById(id).classList.toggle('show'); }
+        function historyBack() { if (sceneHistory.length > 1) { sceneHistory.pop(); go(sceneHistory[sceneHistory.length - 1]); } }
+        function toggleDrop(id) { document.querySelectorAll('.dropdown-menu').forEach(m => m.id === id ? m.classList.toggle('show') : m.classList.remove('show')); }
         function showEditor(t) {
             activeTemplate = t; document.getElementById('edit-img').src = t;
             document.getElementById('create-grid-view').classList.add('hidden');
             document.getElementById('create-editor-view').classList.remove('hidden');
+            colorPanes('create-left', 'create-right');
         }
-        function hideEditor() {
-            document.getElementById('create-grid-view').classList.remove('hidden');
-            document.getElementById('create-editor-view').classList.add('hidden');
-        }
+        function hideEditor() { document.getElementById('create-grid-view').classList.remove('hidden'); document.getElementById('create-editor-view').classList.add('hidden'); }
         function sync(id, val) { document.getElementById(id).innerText = val; }
-
+        function updateStyle(prop, val) {
+            currentStyles[prop] = val;
+            const targets = [document.getElementById('p-top'), document.getElementById('p-bottom')];
+            targets.forEach(t => {
+                if (prop === 'color') t.style.color = val;
+                if (prop === 'font') t.style.fontFamily = val;
+                if (prop === 'fontSize') t.style.fontSize = val;
+                if (prop === 'strokeWidth' || prop === 'strokeColor') t.style.webkitTextStroke = `${currentStyles.strokeWidth} ${currentStyles.strokeColor}`;
+            });
+        }
         async function saveMeme() {
-            await db.collection("exhibition_memes").add({
+            await db.collection("memes").add({
                 template: activeTemplate, nickname: document.getElementById('in-nick').value || 'anon',
-                topText: document.getElementById('in-top').value,
-                bottomText: document.getElementById('in-bottom').value,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                topText: document.getElementById('in-top').value, bottomText: document.getElementById('in-bottom').value,
+                styles: currentStyles, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
             go('scene-archive');
         }
-
-        function setMode(m) { currentMode = m; renderArchive(); }
+        function setMode(m) { currentMode = m; document.getElementById('tab-nicks').classList.toggle('active', m === 'nicks'); document.getElementById('tab-icons').classList.toggle('active', m === 'icons'); renderArchive(); }
         function renderArchive() {
-            const list = document.getElementById('archive-list');
-            list.innerHTML = currentMemes.map(m => `
-                <div class="${currentMode === 'nicks' ? 'nick-card' : 'meme-icon-card'}">
-                    ${currentMode === 'icons' ? `<img src="${m.template}">` : m.nickname}
-                </div>
-            `).join('');
+            const list = document.getElementById('archive-list'); list.innerHTML = '';
+            if (currentMode === 'nicks') {
+                list.innerHTML = currentMemes.map(m => `<div class="nick-card" onclick='openDetail(${JSON.stringify(m).replace(/'/g, "&apos;")})'>${m.nickname || 'anon'}</div>`).join('');
+            } else {
+                currentMemes.forEach(m => {
+                    const s = m.styles || currentStyles; const el = document.createElement('div'); el.className = 'meme-icon-card'; el.onclick = () => openDetail(m);
+                    el.innerHTML = `<img src="${m.template}"><div class="meme-text t-top" style="font-size:0.4rem; font-family:${s.font}; color:${s.color}; -webkit-text-stroke:0.1px ${s.strokeColor}">${m.topText || ''}</div><div class="meme-text t-bottom" style="font-size:0.4rem; font-family:${s.font}; color:${s.color}; -webkit-text-stroke:0.1px ${s.strokeColor}">${m.bottomText || ''}</div>`;
+                    list.appendChild(el);
+                });
+            }
         }
-
+        function openDetail(data) {
+            const left = document.getElementById('archive-left'); const right = document.getElementById('archive-right');
+            left.style.width = '50%'; right.style.width = '50%'; right.classList.remove('hidden'); document.getElementById('archive-list').className = 'archive-grid grid-cols-half';
+            document.getElementById('det-img').src = data.template; document.getElementById('det-top').innerText = data.topText || ''; document.getElementById('det-bottom').innerText = data.bottomText || '';
+            const s = data.styles || currentStyles; [document.getElementById('det-top'), document.getElementById('det-bottom')].forEach(t => { t.style.color = s.color; t.style.fontFamily = s.font; t.style.fontSize = s.fontSize; t.style.webkitTextStroke = `${s.strokeWidth} ${s.strokeColor}`; });
+            document.getElementById('det-meta').innerText = `by ${data.nickname || 'anon'}`; colorPanes('archive-left', 'archive-right');
+        }
+        function closeDetail() {
+            document.getElementById('archive-left').style.width = '100%'; document.getElementById('archive-right').classList.add('hidden'); document.getElementById('archive-list').className = 'archive-grid grid-cols-full'; colorPanes('archive-left');
+        }
+        window.onclick = (e) => { if (!e.target.closest('.nav-pill-wrapper')) document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); };
         init();
     </script>
 </body>
